@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow - Продвинутый Pomodoro Timer</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-concierge-bell"></i>
+                <h1>Focus<span>Flow</span></h1>
+            </div>
+            <p class="subtitle">Максимизируйте вашу продуктивность с умным таймером Pomodoro</p>
+        </header>
+
+        <main class="main-content">
+            <section class="card timer-container">
+                <div class="card-header">
+                    <h2><i class="fas fa-clock"></i> Таймер Pomodoro</h2>
+                    <div class="pomodoro-count">
+                        <span id="session-count">0</span>
+                        <small>сессии сегодня</small>
+                    </div>
+                </div>
+                
+                <div class="timer-mode">
+                    <button class="active" data-mode="work">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Работа</span>
+                    </button>
+                    <button data-mode="short-break">
+                        <i class="fas fa-coffee"></i>
+                        <span>Перерыв</span>
+                    </button>
+                    <button data-mode="long-break">
+                        <i class="fas fa-couch"></i>
+                        <span>Отдых</span>
+                    </button>
+                </div>
+                
+                <div class="timer-display">
+                    <div class="timer-progress-container">
+                        <svg class="timer-circle" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="90" fill="none" class="timer-bg" />
+                            <circle class="timer-progress" cx="100" cy="100" r="90" fill="none" 
+                                    stroke-dasharray="565" stroke-dashoffset="0" />
+                        </svg>
+                        <div class="timer-text-container">
+                            <div class="timer-text">25:00</div>
+                            <div class="timer-mode-text">Готов к работе</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timer-controls">
+                    <button class="btn-primary start">
+                        <i class="fas fa-play"></i>
+                        <span>Старт</span>
+                    </button>
+                    <button class="btn-secondary pause">
+                        <i class="fas fa-pause"></i>
+                        <span>Пауза</span>
+                    </button>
+                    <button class="btn-reset reset">
+                        <i class="fas fa-redo"></i>
+                        <span>Сброс</span>
+                    </button>
+                </div>
+                
+                <div class="timer-settings">
+                    <div class="setting-item">
+                        <label for="work-duration">Работа</label>
+                        <div class="input-with-buttons">
+                            <button class="btn-decrement">-</button>
+                            <input type="number" id="work-duration" min="5" max="60" value="25">
+                            <button class="btn-increment">+</button>
+                        </div>
+                        <span class="setting-unit">мин</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="short-break-duration">Перерыв</label>
+                        <div class="input-with-buttons">
+                            <button class="btn-decrement">-</button>
+                            <input type="number" id="short-break-duration" min="1" max="15" value="5">
+                            <button class="btn-increment">+</button>
+                        </div>
+                        <span class="setting-unit">мин</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="long-break-duration">Отдых</label>
+                        <div class="input-with-buttons">
+                            <button class="btn-decrement">-</button>
+                            <input type="number" id="long-break-duration" min="10" max="30" value="15">
+                            <button class="btn-increment">+</button>
+                        </div>
+                        <span class="setting-unit">мин</span>
+                    </div>
+                </div>
+
+                <div class="additional-features">
+                    <label class="feature-toggle">
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="auto-start">
+                            <span class="slider"></span>
+                        </div>
+                        <span class="feature-text">Авто-старт</span>
+                    </label>
+                    <label class="feature-toggle">
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="dark-theme">
+                            <span class="slider"></span>
+                        </div>
+                        <span class="feature-text">Темная тема</span>
+                    </label>
+                    <label class="feature-toggle">
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="focus-mode">
+                            <span class="slider"></span>
+                        </div>
+                        <span class="feature-text">Режим фокуса</span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="card task-section">
+                <div class="card-header">
+                    <h2><i class="fas fa-tasks"></i> Мои задачи</h2>
+                    <div class="task-stats-badge">
+                        <span id="tasks-count">0</span>/<span id="tasks-total">0</span>
+                    </div>
+                </div>
+                
+                <div class="task-input-container">
+                    <div class="task-input">
+                        <i class="fas fa-plus"></i>
+                        <input type="text" id="task-input" placeholder="Добавьте новую задачу...">
+                    </div>
+                    <button class="btn-primary" id="add-task">Добавить</button>
+                </div>
+                
+                <div class="task-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <span>Все</span>
+                        <span class="filter-count" id="count-all">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="active">
+                        <span>Активные</span>
+                        <span class="filter-count" id="count-active">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="completed">
+                        <span>Завершенные</span>
+                        <span class="filter-count" id="count-completed">0</span>
+                    </button>
+                </div>
+                
+                <div class="task-list-container">
+                    <ul class="task-list" id="task-list">
+                        <!-- Задачи будут добавляться здесь -->
+                    </ul>
+                </div>
+
+                <div class="task-actions">
+                    <div class="tasks-summary">
+                        <span>Осталось задач: <strong id="tasks-left">0</strong></span>
+                    </div>
+                    <button class="btn-clear" id="clear-completed">
+                        <i class="fas fa-trash"></i>
+                        Очистить завершенные
+                    </button>
+                </div>
+            </section>
+
+            <section class="card stats-container">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-pie"></i> Статистика продуктивности</h2>
+                    <div class="time-range-selector">
+                        <button class="range-btn active" data-range="week">Неделя</button>
+                        <button class="range-btn" data-range="month">Месяц</button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="today-pomodoros">0</div>
+                            <div class="stat-label">Помидорок сегодня</div>
+                            <div class="stat-trend" id="daily-trend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card secondary">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="week-pomodoros">0</div>
+                            <div class="stat-label">За неделю</div>
+                            <div class="stat-trend" id="weekly-trend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card accent">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="total-pomodoros">0</div>
+                            <div class="stat-label">Всего времени</div>
+                            <div class="stat-subvalue" id="total-hours">0ч</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="completed-tasks">0</div>
+                            <div class="stat-label">Задач выполнено</div>
+                            <div class="stat-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="task-progress"></div>
+                                </div>
+                                <span id="completion-rate">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Активность по дням</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="dailyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Распределение времени</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="timeDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="productivity-insights">
+                    <h3>Инсайты продуктивности</h3>
+                    <div class="insights-container">
+                        <div class="insight-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <p id="productivity-insight">Анализ вашей продуктивности появится здесь после нескольких сессий</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>FocusFlow © 2023 | Сделано с <i class="fas fa-heart"></i> для вашей продуктивности</p>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-bell notification-icon"></i>
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title">Уведомление</div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+        </div>
+        <button class="notification-close" id="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>
